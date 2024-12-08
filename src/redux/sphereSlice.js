@@ -58,7 +58,7 @@ const sendMessage = (method, params = {}) => {
 const sphereSlice = createSlice({
   name: 'sphere',
   initialState: {
-    radius: 5,
+    radius: 1,
     status: 'idle'
   },
   reducers: {},

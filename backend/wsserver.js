@@ -3,7 +3,7 @@ const WebSocket = require('ws')
 const wss = new WebSocket.Server({ port: 4001 })
 
 let counter = 0
-let radius = 5
+let radius = 1
 
 wss.on('connection', ws => {
   console.log('Client connected')
