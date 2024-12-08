@@ -57,3 +57,28 @@ src
 6. **Set Sphere Radius via JSON-RPC**:
    - **Backend**: Enhanced `wsserver.js` to support `set_radius` and `get_radius`.
    - **Frontend**: Updated `Sphere.js` and `sphereSlice.js` to handle radius updates via WebSocket thunks.
+
+   ---
+
+## Usage Instructions
+
+### 1. **Run the Backend**
+
+Start the HTTP and WebSocket servers:
+
+```bash
+# Start the HTTP server
+node backend/server.js
+
+# Start the WebSocket server
+node backend/wsserver.js
+```
+
+### 2. **Run the Frontend**
+
+Install dependencies and start the React app:
+
+```bash
+npm install
+npm start
+```
