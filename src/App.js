@@ -10,7 +10,7 @@ function App () {
       <Counter />
       <Counter2 />
       <Counter3 />
-      {/* <Sphere /> */}
+      <Sphere />
     </div>
   )
 }

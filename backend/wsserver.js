@@ -3,13 +3,14 @@ const WebSocket = require('ws')
 const wss = new WebSocket.Server({ port: 4001 })
 
 let counter = 0
+let radius = 5
 
 wss.on('connection', ws => {
   console.log('Client connected')
 
   ws.on('message', message => {
     const request = JSON.parse(message)
-    const { method, id } = request
+    const { method, params, id } = request
 
     let response
 
@@ -21,6 +22,11 @@ wss.on('connection', ws => {
       response = { id, result: counter }
     } else if (method === 'getCounter') {
       response = { id, result: counter }
+    } else if (method === 'set_radius') {
+      radius = params.radius
+      response = { id, result: 'Radius set successfully' }
+    } else if (method === 'get_radius') {
+      response = { id, result: radius }
     } else {
       response = { id, error: 'Method not supported' }
     }

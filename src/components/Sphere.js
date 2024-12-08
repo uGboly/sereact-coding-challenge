@@ -1,45 +1,68 @@
-import React, { useEffect, useState } from 'react';
-import { Canvas } from '@react-three/fiber';
+import React, { useEffect, useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { Canvas } from '@react-three/fiber'
+import { initWebSocket, setRadius, getRadius } from '../redux/sphereSlice'
 
-function Sphere() {
-  const [radius, setRadius] = useState(5);
-  const [ws, setWs] = useState(null);
-
-  useEffect(() => {
-    const socket = new WebSocket('ws://localhost:4000');
-    setWs(socket);
-    // ws.send(JSON.stringify({ method: 'sphere.get_radius' }));
-    ws.onmessage = (event) => {
-      const { result } = JSON.parse(event.data);
-      if (result) setRadius(result);
-    };
-    return () => socket.close();
-  }, []);
-
-  const updateRadius = (newRadius) => {
-    ws.send(JSON.stringify({ method: 'sphere.set_radius', params: { radius: newRadius } }));
-    setRadius(newRadius);
-  };
-
+function SphereDisplay ({ radius }) {
   return (
-    <div className="p-4 bg-white rounded shadow-md mt-4">
-      <h1 className="text-2xl font-bold">Sphere Radius: {radius}</h1>
-      <Canvas>
-        <mesh>
-          <sphereBufferGeometry args={[radius, 32, 32]} />
-          <meshStandardMaterial color="blue" />
-        </mesh>
-      </Canvas>
-      <div className="mt-4 space-x-2">
-        <button onClick={() => updateRadius(radius + 1)} className="btn">
-          Increase Radius
-        </button>
-        <button onClick={() => updateRadius(radius - 1)} className="btn">
-          Decrease Radius
-        </button>
-      </div>
-    </div>
-  );
+    <mesh>
+      <sphereGeometry args={[radius, 32, 32]} />
+      <meshStandardMaterial color='blue' />
+    </mesh>
+  )
 }
 
-export default Sphere;
+function Sphere () {
+  const radius = useSelector(state => state.sphere.radius)
+  const status = useSelector(state => state.sphere.status)
+  const dispatch = useDispatch()
+  const [inputRadius, setInputRadius] = useState(radius)
+
+  useEffect(() => {
+    dispatch(initWebSocket())
+      .then(() => {
+        dispatch(getRadius())
+      })
+      .catch(() => {
+        console.error('Failed to connect to WebSocket')
+      })
+  }, [dispatch])
+
+  const handleSetRadius = () => {
+    dispatch(setRadius(parseFloat(inputRadius)))
+  }
+
+  const handleGetRadius = () => {
+    dispatch(getRadius())
+  }
+
+  if (status === 'disconnected') {
+    return <p>Unable to connect to the WebSocket server.</p>
+  }
+
+  return (
+    <div>
+      <div className='controls'>
+        <input
+          type='number'
+          value={inputRadius}
+          onChange={e => setInputRadius(e.target.value)}
+          className='input'
+        />
+        <button onClick={handleSetRadius} className='btn'>
+          Set Radius
+        </button>
+        <button onClick={handleGetRadius} className='btn'>
+          Get Radius
+        </button>
+      </div>
+      <Canvas style={{ height: '400px', background: 'lightgray' }}>
+        <ambientLight />
+        <pointLight position={[10, 10, 10]} />
+        <SphereDisplay radius={radius} />
+      </Canvas>
+    </div>
+  )
+}
+
+export default Sphere
