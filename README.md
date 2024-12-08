@@ -1,70 +1,59 @@
-# Getting Started with Create React App
+# Code Challenge
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This document summarizes the implementation of the required tasks for the code challenge.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## Project Structure
 
-### `npm start`
+The project follows a modular structure with distinct directories for backend, components, and Redux logic:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```
+backend
+    server.js          # Node.js backend for JSON-RPC over HTTP
+    wsserver.js        # Node.js WebSocket backend for JSON-RPC
+src
+│  App.js             # Main entry point for the React app
+│  index.css          # Tailwind CSS setup
+│  index.js           # React root rendering
+│
+├─components
+│      Counter.js      # Simple Redux counter
+│      Counter2.js     # Counter with HTTP backend
+│      Counter3.js     # Counter with WebSocket backend
+│      Sphere.js       # Sphere component with Three.js
+│
+└─redux
+        counterSlice.js       # Reducer for local counter
+        counter2Slice.js      # Reducer for HTTP-based counter
+        counter3Slice.js      # Reducer for WebSocket-based counter
+        sphereSlice.js        # Reducer for sphere radius management
+        store.js              # Redux store configuration
+```
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Implementation Breakdown
 
-### `npm test`
+1. **Counter App with React and Redux**:
+   - Created `Counter.js` to manage a simple counter using Redux.
+   - Used `counterSlice.js` for state management and configured `store.js`.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+2. **Counter with JSON-RPC API over HTTP**:
+   - **Backend**: Built `server.js` with Express to handle `increment`, `decrement`, and `getCounter` requests.
+   - **Frontend**: Implemented `Counter2.js` using Axios and `counter2Slice.js` with `createAsyncThunk`.
 
-### `npm run build`
+3. **Counter with JSON-RPC API over WebSocket**:
+   - **Backend**: Built `wsserver.js` using the `ws` library for WebSocket-based counter operations.
+   - **Frontend**: Developed `Counter3.js` and `counter3Slice.js` with WebSocket communication (e.g., `initWebSocket`, `incrementAsync`).
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+4. **Tailwind CSS Styling**:
+   - Styled components using Tailwind CSS for a modern, responsive layout.
+   - Created a two-column layout in `App.js` with counters on the left and the sphere on the right.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+5. **Display Sphere in Three.js**:
+   - Used `@react-three/fiber` in `Sphere.js` to render a 3D sphere.
+   - Added lights and a dynamically updated `radius` prop.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+6. **Set Sphere Radius via JSON-RPC**:
+   - **Backend**: Enhanced `wsserver.js` to support `set_radius` and `get_radius`.
+   - **Frontend**: Updated `Sphere.js` and `sphereSlice.js` to handle radius updates via WebSocket thunks.
