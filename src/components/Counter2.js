@@ -16,7 +16,7 @@ function Counter2 () {
 
   return (
     <div className='p-4 bg-white rounded shadow-md'>
-      <h1 className='text-2xl font-bold'>Counter2: {count}</h1>
+      <h1 className='text-2xl font-bold'>HTTP Counter: {count}</h1>
       <div className='mt-4 space-x-2'>
         <button onClick={() => dispatch(incrementAsync())} className='btn'>
           Increment

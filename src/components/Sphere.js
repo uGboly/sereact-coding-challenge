@@ -41,26 +41,36 @@ function Sphere () {
   }
 
   return (
-    <div>
-      <div className='controls'>
+    <div className='p-6 bg-white rounded-lg shadow-md space-y-6'>
+      <div className='controls flex items-center space-x-4'>
         <input
           type='number'
           value={inputRadius}
           onChange={e => setInputRadius(e.target.value)}
-          className='input'
+          className='w-24 p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-300 focus:outline-none'
+          placeholder='Radius'
         />
-        <button onClick={handleSetRadius} className='btn'>
+        <button
+          onClick={() => handleSetRadius(inputRadius)}
+          className='px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:ring focus:ring-blue-300'
+        >
           Set Radius
         </button>
-        <button onClick={handleGetRadius} className='btn'>
+        <button
+          onClick={handleGetRadius}
+          className='px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 focus:ring focus:ring-gray-300'
+        >
           Get Radius
         </button>
       </div>
-      <Canvas style={{ height: '400px', background: 'lightgray' }}>
-        <ambientLight />
-        <pointLight position={[10, 10, 10]} />
-        <SphereDisplay radius={radius} />
-      </Canvas>
+
+      <div className='h-96 bg-gray-100 rounded-lg flex justify-center items-center'>
+        <Canvas style={{ height: '100%', width: '100%' }}>
+          <ambientLight />
+          <pointLight position={[10, 10, 10]} />
+          <SphereDisplay radius={radius} />
+        </Canvas>
+      </div>
     </div>
   )
 }
